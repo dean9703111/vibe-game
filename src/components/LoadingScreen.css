@@ -1,0 +1,112 @@
+.grading-animation {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 40px auto;
+}
+
+.paper {
+    position: absolute;
+    width: 150px;
+    height: 180px;
+    background: white;
+    border: 3px solid var(--pixel-border);
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    animation: paperShake 2s ease-in-out infinite;
+}
+
+.paper-lines {
+    width: 100%;
+    height: 3px;
+    background: var(--pixel-border);
+    margin: 12px 0;
+    opacity: 0.3;
+}
+
+.pen {
+    position: absolute;
+    font-size: 2rem;
+    left: 50%;
+    top: 20%;
+    transform: translateX(-50%);
+    animation: penMove 2s ease-in-out infinite;
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.check-marks {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    gap: 15px;
+}
+
+.check-mark {
+    font-size: 1.5rem;
+    color: var(--pixel-success);
+    opacity: 0;
+    animation: checkAppear 2s ease-in-out infinite;
+}
+
+.check-mark:nth-child(1) {
+    animation-delay: 0.3s;
+}
+
+.check-mark:nth-child(2) {
+    animation-delay: 0.6s;
+}
+
+.check-mark:nth-child(3) {
+    animation-delay: 0.9s;
+}
+
+@keyframes paperShake {
+    0%, 100% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    25% {
+        transform: translate(-50%, -50%) rotate(-1deg);
+    }
+    75% {
+        transform: translate(-50%, -50%) rotate(1deg);
+    }
+}
+
+@keyframes penMove {
+    0%, 100% {
+        transform: translateX(-50%) translateY(0) rotate(-45deg);
+    }
+    50% {
+        transform: translateX(-50%) translateY(10px) rotate(-45deg);
+    }
+}
+
+@keyframes checkAppear {
+    0%, 20% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    30% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+    40%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
