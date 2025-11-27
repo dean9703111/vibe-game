@@ -74,9 +74,12 @@ export const submitResult = async (data) => {
         
         console.log("Submitting to:", submitUrl);
         
-        const response = await axios.post(submitUrl, data, {
+        // Google Apps Script Web Apps need redirect: 'follow' mode
+        // IMPORTANT: Use text/plain to avoid CORS preflight (OPTIONS) request
+        // Google Apps Script doesn't handle OPTIONS requests well for application/json
+        const response = await axios.post(submitUrl, JSON.stringify(data), {
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'text/plain;charset=utf-8',
             }
         });
         
