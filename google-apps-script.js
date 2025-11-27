@@ -2,11 +2,29 @@
 // Google Apps Script - 安全批改系統
 // ==========================================
 
+// CORS 處理函數
+function addCorsHeaders(output) {
+  return output
+    .setHeader('Access-Control-Allow-Origin', '*')
+    .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+    .setHeader('Access-Control-Allow-Headers', 'Content-Type')
+    .setHeader('Access-Control-Max-Age', '86400');
+}
+
+// 處理 OPTIONS 請求（CORS preflight）
+function doOptions(e) {
+  return addCorsHeaders(
+    ContentService.createTextOutput('')
+  );
+}
+
 // 處理 GET 請求 - 用於測試
 function doGet(e) {
-  return ContentService
+  var output = ContentService
     .createTextOutput(JSON.stringify({"status": "ok", "message": "Apps Script is working"}))
     .setMimeType(ContentService.MimeType.JSON);
+  
+  return addCorsHeaders(output);
 }
 
 // 處理 POST 請求 - 批改答案或儲存結果
@@ -21,21 +39,25 @@ function doPost(e) {
     }
     
     // 錯誤：未知的 action
-    return ContentService
+    var output = ContentService
       .createTextOutput(JSON.stringify({
         "status": "error",
         "message": "Unknown action: " + data.action
       }))
       .setMimeType(ContentService.MimeType.JSON);
+    
+    return addCorsHeaders(output);
       
   } catch (error) {
     Logger.log("Error: " + error.toString());
-    return ContentService
+    var output = ContentService
       .createTextOutput(JSON.stringify({
         "status": "error",
         "message": error.toString()
       }))
       .setMimeType(ContentService.MimeType.JSON);
+    
+    return addCorsHeaders(output);
   }
 }
 
@@ -54,12 +76,14 @@ function gradeAnswers(data) {
   var questionsSheet = spreadsheet.getSheetByName("Questions");
   
   if (!questionsSheet) {
-    return ContentService
+    var output = ContentService
       .createTextOutput(JSON.stringify({
         "status": "error",
         "message": "Questions sheet not found. Please create a 'Questions' sheet with answers."
       }))
       .setMimeType(ContentService.MimeType.JSON);
+    
+    return addCorsHeaders(output);
   }
   
   // 讀取所有題目（假設格式：題號, 題目, A, B, C, D, 解答）
@@ -145,9 +169,11 @@ function gradeAnswers(data) {
     details: details
   };
   
-  return ContentService
+  var output = ContentService
     .createTextOutput(JSON.stringify(result))
     .setMimeType(ContentService.MimeType.JSON);
+  
+  return addCorsHeaders(output);
 }
 
 // ==========================================
